@@ -6,6 +6,7 @@ Research code for predicting five-trading-day A-share returns, from an OLS basel
 
 ## Start here
 
+- [V1 source archive and code map](v1/README.md)
 - [Research overview and latest results (Chinese)](v2/V2_PROGRESS_SUMMARY.md)
 - [V1/V2 OLS and Elastic Net comparison (Chinese)](v2/V1_V2_MODEL_COMPARISON.md)
 - [Full research document index: 38 stages](v2/RESEARCH_DOCUMENT_INDEX.md)
@@ -40,7 +41,8 @@ The simulation uses RMB 100 million initial capital, 20 bp round-trip base costs
 ## Repository layout
 
 ```text
-*.py                  Historical V1 pipeline and shared dependencies
+*.py                  Canonical executable V1/shared modules
+v1/                   V1 source archive and code map
 v2/                   V2 factors, losses, experiments, tests and research notes
 reports/v1/           Selected historical V1 reports
 reports/v2/           Historical V2 experiment reports
@@ -49,7 +51,7 @@ data/README.md        Data sourcing and expected local layout
 requirements*.txt     Versions recorded from the local research environment
 ```
 
-The original source layout is retained because V2 imports shared modules from the root. Raw/vendor data, fitted models, predictions, orders, caches and credentials are not distributed. This is a source-and-report archive; reproducing every historical result requires separately prepared local data and prerequisite artifacts. Some report links refer to those unbundled artifacts.
+V1 source copies are grouped under `v1/` for browsing. Root-level scripts remain the canonical executable copies because V2 imports shared modules from the root; see the V1 README for execution-path details. Raw/vendor data, fitted models, predictions, orders, caches and credentials are not distributed. This is a source-and-report archive; reproducing every historical result requires separately prepared local data and prerequisite artifacts. Some report links refer to those unbundled artifacts.
 
 ## Quick check without market data
 
