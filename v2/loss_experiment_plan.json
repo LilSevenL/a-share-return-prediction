@@ -1,0 +1,24 @@
+{
+  "status": "implemented_and_numerically_tested_not_market_trained",
+  "feature_design": "research_design/factor_catalog_500.json",
+  "feature_pipeline_status": "balanced_500_not_yet_implemented",
+  "target": "target_logret_5d_unchanged",
+  "loss_candidates": [
+    {"loss": "mse", "role": "baseline", "convention": "half_squared_error"},
+    {"loss": "mae", "role": "absolute_error_robustness_control", "approximation": "none"},
+    {"loss": "huber", "delta": 1.35, "role": "priority_candidate_not_selected_winner"}
+  ],
+  "target_scale": "1.4826*MAD(training_y); if zero use training_std; if constant use 1",
+  "scale_is_fixed_across_losses_in_each_fold": true,
+  "primary_comparison_weights": {"date_gamma": 0.75, "stock_multiplier": 1.0, "normalize_by": "sum_of_weights"},
+  "controlled_first_pass_l2": 0.01,
+  "l2_interpretation": "initial experimental setting on standardized X and scaled target; not transferred from V1 and not validated",
+  "validation_only_followup_grid": {"l2": [0.001, 0.01, 0.1], "huber_delta": [0.5, 1.0, 1.35, 2.0]},
+  "grid_execution": "not_automatic; bounded_development_experiment_after_feature_pipeline_ready",
+  "training_target_clipping": false,
+  "intercept_penalized": false,
+  "nonconverged_models_eligible": false,
+  "same_evaluation_for_all": ["daily_rank_ic", "daily_weighted_rank_ic_with_common_ex_ante_weights", "ic", "rmse", "mae", "common_rule_cost_aware_simulation"],
+  "development_folds": [2017, 2018, 2019, 2020, 2021, 2022, 2023],
+  "test_used": false
+}
