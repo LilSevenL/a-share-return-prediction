@@ -27,7 +27,7 @@ import duckdb
 from build_features import FACTOR_COLUMNS
 
 
-PROJECT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = Path(__file__).resolve().parents[1]
 PROCESSED_DIR = PROJECT_DIR / "quant_data" / "processed"
 DEFAULT_FEATURES_DIR = PROCESSED_DIR / "features_50"
 DEFAULT_TARGETS_DIR = PROCESSED_DIR / "targets_5d"

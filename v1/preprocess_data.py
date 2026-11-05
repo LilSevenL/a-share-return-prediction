@@ -25,7 +25,7 @@ from typing import Any, Iterable
 import pandas as pd
 
 
-PROJECT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = Path(__file__).resolve().parents[1]
 RAW_DIR = PROJECT_DIR / "quant_data"
 PROCESSED_DIR = RAW_DIR / "processed"
 REPORT_DIR = PROCESSED_DIR / "quality"

@@ -20,7 +20,7 @@ import numpy as np
 import pandas as pd
 
 
-PROJECT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = Path(__file__).resolve().parents[1]
 EVALUATION_DIR = PROJECT_DIR / "quant_data" / "processed" / "permanent_test" / "evaluation"
 DEFAULT_OUTPUT = PROJECT_DIR / "quant_data" / "processed" / "result_analysis"
 MODEL_LABELS = {

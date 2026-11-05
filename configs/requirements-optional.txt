@@ -1,0 +1,7 @@
+# Versions recorded from the local research environment; Python 3.12.
+-r ../requirements.txt
+tushare==1.4.29
+lightgbm==4.7.0
+torch==2.14.0
+matplotlib==3.11.1
+scikit-learn==1.9.0

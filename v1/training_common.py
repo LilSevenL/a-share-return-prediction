@@ -19,7 +19,7 @@ from scipy.stats import rankdata
 from build_features import FACTOR_COLUMNS
 
 
-PROJECT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_DATASET_DIR = PROJECT_DIR / "quant_data" / "processed" / "model_dataset"
 
 

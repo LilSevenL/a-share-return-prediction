@@ -6,11 +6,11 @@ Research code for predicting five-trading-day A-share returns, from an OLS basel
 
 ## Start here
 
-- [V1 source archive and code map](v1/README.md)
-- [Research overview and latest results (Chinese)](v2/V2_PROGRESS_SUMMARY.md)
-- [V1/V2 OLS and Elastic Net comparison (Chinese)](v2/V1_V2_MODEL_COMPARISON.md)
-- [Full research document index: 38 stages](v2/RESEARCH_DOCUMENT_INDEX.md)
-- [Reproduction guide and dependencies](docs/REPRODUCING.md)
+- [V1 code and instructions](v1/README.md)
+- [Research overview and latest results (Chinese)](v2/docs/V2_PROGRESS_SUMMARY.md)
+- [V1/V2 OLS and Elastic Net comparison (Chinese)](v2/docs/V1_V2_MODEL_COMPARISON.md)
+- [Full research document index: 38 stages](v2/docs/RESEARCH_DOCUMENT_INDEX.md)
+- [Reproduction guide and dependencies](v2/docs/REPRODUCING.md)
 - [Data requirements](data/README.md)
 
 ## Selected findings
@@ -41,17 +41,23 @@ The simulation uses RMB 100 million initial capital, 20 bp round-trip base costs
 ## Repository layout
 
 ```text
-*.py                  Canonical executable V1/shared modules
-v1/                   V1 source archive and code map
-v2/                   V2 factors, losses, experiments, tests and research notes
+README.md             Research question, results, limits and entry points
+requirements.txt      Core research dependencies
+v1/                   Historical V1 code and pipeline documentation
+v2/
+  features/           Factor definitions, construction and data audits
+  models/             Linear models, robust losses and preprocessing
+  backtest/           Portfolio accounting and execution engines
+  experiments/        Training runs, comparisons, attribution and verification
+  tests/              Synthetic numerical and accounting checks
+  docs/               Research plans, progress and reproduction guide
+configs/              Factor catalogues, experiment plan and optional dependencies
 reports/v1/           Selected historical V1 reports
 reports/v2/           Historical V2 experiment reports
-docs/                 Reproduction guide and legacy pipeline documentation
 data/README.md        Data sourcing and expected local layout
-requirements*.txt     Versions recorded from the local research environment
 ```
 
-V1 source copies are grouped under `v1/` for browsing. Root-level scripts remain the canonical executable copies because V2 imports shared modules from the root; see the V1 README for execution-path details. Raw/vendor data, fitted models, predictions, orders, caches and credentials are not distributed. This is a source-and-report archive; reproducing every historical result requires separately prepared local data and prerequisite artifacts. Some report links refer to those unbundled artifacts.
+All Python source files live under `v1/` or `v2/`. V2 uses the shared V1 implementations without duplicate root-level scripts. Data remain local under `<repository>/quant_data/`, which is ignored by Git. Raw/vendor data, fitted models, predictions, orders, caches and credentials are not distributed. Reproducing historical results requires separately prepared data and prerequisite artifacts; some report links refer to those unbundled artifacts.
 
 ## Quick check without market data
 
@@ -59,11 +65,11 @@ Use Python 3.12 and install `requirements.txt` in a clean virtual environment. F
 
 ```sh
 python -m pip install -r requirements.txt
-python -m unittest discover -s v2 -p test_streaming_ols.py
-python -m unittest discover -s v2 -p test_linear_losses.py
+python -m unittest discover -s v2/tests -p test_streaming_ols.py
+python -m unittest discover -s v2/tests -p test_linear_losses.py
 ```
 
-These checks use synthetic numerical fixtures. They do not download data, rerun training, or establish trading profitability. See [REPRODUCING.md](docs/REPRODUCING.md) for the experiment sequence.
+These checks use synthetic numerical fixtures. They do not download data, rerun training, or establish trading profitability. See [REPRODUCING.md](v2/docs/REPRODUCING.md) for the experiment sequence.
 
 ## Research boundaries
 

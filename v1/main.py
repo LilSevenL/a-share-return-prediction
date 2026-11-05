@@ -26,7 +26,7 @@ import pandas as pd
 import tushare as ts
 
 
-PROJECT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_DATA_DIR = PROJECT_DIR / "quant_data"
 DATA_DIR = DEFAULT_DATA_DIR
 CACHE_DIR = DATA_DIR / "cache"

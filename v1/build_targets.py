@@ -29,7 +29,7 @@ from typing import Any
 import duckdb
 
 
-PROJECT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = Path(__file__).resolve().parents[1]
 PROCESSED_DIR = PROJECT_DIR / "quant_data" / "processed"
 PARQUET_DIR = PROCESSED_DIR / "parquet"
 DEFAULT_OUTPUT_DIR = PROCESSED_DIR / "targets_5d"

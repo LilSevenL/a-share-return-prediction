@@ -2,7 +2,7 @@
 
 This directory collects the V1 source files retained in this repository: data acquisition and preparation, the original 50-factor library, five-day targets, rolling model training and tuning, backtesting, final retraining and the already-inspected historical test.
 
-These files are byte-for-byte archival copies of the corresponding root-level Python scripts at the time this directory was added. They are not reconstructed snapshots of every earlier experiment, and do not include fitted models or vendor data.
+These are the retained historical V1 implementations. The directory reorganization only adapts repository/data paths; it does not change factor formulas, fitting methods or trading rules. Fitted models and vendor data are not bundled.
 
 ## Code map
 
@@ -20,16 +20,21 @@ These files are byte-for-byte archival copies of the corresponding root-level Py
 
 ## Reports and instructions
 
-- [Selected V1 reports](../reports/v1/)
-- [Original pipeline documentation](../docs/LEGACY_PIPELINE.md)
-- [Environment and reproduction guide](../docs/REPRODUCING.md)
+- [Selected V1 reports](../reports/v1)
+- [Original pipeline documentation](docs/LEGACY_PIPELINE.md)
+- [Environment and reproduction guide](../v2/docs/REPRODUCING.md)
 - [Data requirements](../data/README.md)
-- [V1/V2 model comparison](../v2/V1_V2_MODEL_COMPARISON.md)
+- [V1/V2 model comparison](../v2/docs/V1_V2_MODEL_COMPARISON.md)
 
 ## Execution and compatibility
 
-This directory provides a convenient V1 browsing archive. **Use the root-level scripts for execution**, for example `python train_ols.py --help` from the repository root. The historical scripts resolve data paths relative to their own location; directly executing a copy under `v1/` would point several defaults at `v1/quant_data/`. No vendor data or intermediate artifacts are bundled there.
+Run from the repository root, for example:
 
-The root-level scripts remain the canonical executable copies because V2 imports shared modules from them. V2 code and experiment notes live under `../v2/`. This organizational change does not alter model fitting, data, trading rules or saved results.
+```sh
+python v1/train_ols.py --help
+python v1/train_models.py --help
+```
+
+Data defaults continue to point to `<repository>/quant_data/`. V2 imports the shared V1 modules through its path bootstrap. There are no duplicate root-level Python scripts. Source files are retained historical implementations with path adaptations for the new layout; original frozen trained artifacts are not modified.
 
 V1 final models and the already-inspected 2025–2026 test are historical, read-only research artifacts. Do not tune V2 against that test or describe it as an untouched independent test.
