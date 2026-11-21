@@ -80,7 +80,7 @@ def main():
     paths={'base':files(ROOT/'quant_data/processed/features_50','feature_year',history,args.end_year)}
     for name in ('daily','adj_factor','daily_basic','moneyflow'):
         paths[name]=files(ROOT/'quant_data/processed/parquet'/name,'year',history,args.end_year)
-    sources=[Path(__file__),_source_path('v2/features/balanced_features.py'),_source_path('v2/features/stable_rolling.py'),_source_path('v2/features/features_500.py'),_source_path('v2/features/build_balanced_features.py'),Path(__file__).parent/'research_design/factor_catalog_500.json']
+    sources=[Path(__file__),_source_path('v2/features/balanced_features.py'),_source_path('v2/features/stable_rolling.py'),_source_path('v2/features/features_500.py'),_source_path('v2/features/build_balanced_features.py'),_source_path('v2/research_design/factor_catalog_500.json')]
     config=dict(args=vars(args),catalog_version=CATALOG['version'],storage='float32; full float64 calculation',
         inputs={k:[dict(path=str(f),bytes=f.stat().st_size,mtime_ns=f.stat().st_mtime_ns) for f in fps] for k,fps in paths.items()},
         sources={f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in sources},

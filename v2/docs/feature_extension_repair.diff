@@ -1,0 +1,35 @@
+--- repair_local_numerics.py	2026-10-25 01:53:19.331482200 -0400
++++ repair_local_numerics_ext.py	2026-11-20 22:38:19.997981700 -0500
+@@ -1,4 +1,4 @@
+-"""Versioned narrow repair of nine unstable rolling columns; no API or labels."""
++"""Extension copy for 2022-2026. Versioned narrow repair of nine unstable rolling columns; no API or labels."""
+ import hashlib
+ import json
+ from pathlib import Path
+@@ -13,14 +13,14 @@
+ 
+ 
+ def main():
+-    source=ROOT/'quant_data/processed/v2/local_features_2011_2023'
+-    dest=ROOT/'quant_data/processed/v2/local_features_2011_2023_stable'
++    source=ROOT/'quant_data/processed/v2/local_features_2022_2026'
++    dest=ROOT/'quant_data/processed/v2/local_features_2022_2026_stable'
+     dest.mkdir(exist_ok=True)
+     (dest/'quality').mkdir(exist_ok=True)
+     if shutil.disk_usage(dest).free<19*2**30:raise RuntimeError('Insufficient disk space for separate repaired version')
+     config=json.loads((source/'build_config.json').read_text(encoding='utf-8'))
+     manifest=dict(parent=str(source),parent_manifest_sha256=hashlib.sha256((source/'build_config.json').read_bytes()).hexdigest(),
+-        sources={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ['repair_local_numerics.py','stable_rolling.py','balanced_features.py']},
++        sources={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ['repair_local_numerics_ext.py','stable_rolling.py','balanced_features.py']},
+         note='Window-local kurtosis (zero variance undefined), trend R2 and 3-day return/volume correlation; no interaction parents changed')
+     mp=dest/'repair_manifest.json'
+     if mp.exists() and json.loads(mp.read_text(encoding='utf-8'))!=manifest:raise ValueError('Repair source changed')
+@@ -51,7 +51,7 @@
+                     x=price.iloc[-w:].to_numpy()
+                     if len(x)==w and np.isfinite(x).all() and np.var(x)>0:
+                         np.testing.assert_allclose(values[f'trend_r2_{w}d'].iloc[-1],np.corrcoef(x,np.arange(w))[0,1]**2,rtol=1e-10,atol=1e-10);checks+=1
+-            result=pd.DataFrame(values,index=cal).loc[lambda x:x.index.isin(dates)&(x.index.year>=2011)].astype('float32')
++            result=pd.DataFrame(values,index=cal).loc[lambda x:x.index.isin(dates)&(x.index.year>=2022)].astype('float32')
+             result.insert(0,'ts_code',code);outputs.append(result.reset_index())
+             if (i+1)%500==0:print(f'Recomputed {i+1} stocks',flush=True)
+         correction=pd.concat(outputs,ignore_index=True);del outputs,raw

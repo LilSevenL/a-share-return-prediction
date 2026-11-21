@@ -27,7 +27,7 @@ def main():
     if shutil.disk_usage(dest).free<19*2**30:raise RuntimeError('Insufficient disk space for separate repaired version')
     config=json.loads((source/'build_config.json').read_text(encoding='utf-8'))
     manifest=dict(parent=str(source),parent_manifest_sha256=hashlib.sha256((source/'build_config.json').read_bytes()).hexdigest(),
-        sources={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ['repair_local_numerics_ext.py','stable_rolling.py','balanced_features.py']},
+        sources={name:hashlib.sha256(_source_path('v2/'+name).read_bytes()).hexdigest() for name in ['repair_local_numerics_ext.py','stable_rolling.py','balanced_features.py']},
         note='Window-local kurtosis (zero variance undefined), trend R2 and 3-day return/volume correlation; no interaction parents changed')
     mp=dest/'repair_manifest.json'
     if mp.exists() and json.loads(mp.read_text(encoding='utf-8'))!=manifest:raise ValueError('Repair source changed')

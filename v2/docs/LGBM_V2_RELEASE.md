@@ -43,6 +43,16 @@ Vendor datasets, fitted models, per-stock predictions/orders and large caches re
 
 ## Interpretation
 
+## Publication completeness check
+
+The GitHub snapshot was cloned into a separate checkout and checked without local market datasets. All 78 existing unit tests and all 14 argparse-based LightGBM/extension command-line help entry points passed using the local research Python environment. Repository Markdown links had no missing targets, and import inspection found no unresolved modules in that environment.
+
+The audit found and corrected two extension-builder provenance paths left over from the flat directory layout. The original build and repair diffs were added. All mapped source/config paths, static source references and 23 published source hashes were then verified, and the 78 tests passed again.
+
+Full model training and a clean dependency installation were outside this publication check. Market datasets, intermediate caches and fitted models are required to rerun the historical fitting workflow.
+
+## Model interpretation
+
 The 0.0827 to 0.1296 label comparison uses the penalized selection score. Mean Rank IC is 0.0873 to 0.1375.
 
 The medium-depth final model accepts approximately 0.001 selection-score loss versus the deep model. Failure to reject a difference at t=2 does not establish equivalence. Sequential searches and revised rules make development t statistics descriptive.
@@ -50,3 +60,5 @@ The medium-depth final model accepts approximately 0.001 selection-score loss ve
 A single placebo initially failed its preset threshold. Expanded multi-seed permutation checks were then specified and run on development folds. They support signal above a random-label baseline and cover only part of the potential leakage mechanisms.
 
 The 2022–2023 results are frozen algorithm-specific confirmation on already-inspected historical years. V1 also evaluated later history. Future reuse must disclose that history. Current-universe survivorship bias and numerical assumptions remain documented limitations.
+
+The original narrow extension changes are archived in [build diff](feature_extension_build.diff) and [repair diff](feature_extension_repair.diff). These describe the flat-layout research sources. Published import/path adaptations are tracked separately in publication_sources.json.

@@ -46,3 +46,5 @@
 ## 5. 之后
 
 数据通过检查后，测试期的使用另行制定方案：先确定要测的模型（例如冻结的 V2 LightGBM FINAL、改用排名标签的线性候选），写明指标和判定规则，再一次性运行。
+
+The original narrow extension changes are archived in [build diff](feature_extension_build.diff) and [repair diff](feature_extension_repair.diff). These describe the flat-layout research sources. Published import/path adaptations are tracked separately in publication_sources.json.

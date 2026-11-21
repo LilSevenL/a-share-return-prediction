@@ -1,0 +1,69 @@
+--- build_local_features.py	2026-10-25 01:46:56.140905900 -0400
++++ build_local_features_ext.py	2026-11-20 22:38:19.996982600 -0500
+@@ -1,6 +1,6 @@
+ """Disk-staged, bounded-memory local survivor-universe feature build.
+ 
+-No API, targets, or 2024+ data. Checkpoints at staging year, stock bucket,
++Extension copy for 2022-2026 (local data ends 2026-08-27). No API or targets. Checkpoints at staging year, stock bucket,
+ and final month. The repaired factor mathematics are unchanged.
+ """
+ import argparse
+@@ -16,7 +16,13 @@
+ import pyarrow.parquet as pq
+ import duckdb
+ from balanced_features import BASE_FEATURES,CATALOG,COLUMNS,RECORDS,technical_stock,finish_cross_section
+-from build_balanced_features import files,save_json,save_frame,ROOT
++from build_balanced_features import save_json,save_frame,ROOT
++def files(root,partition,first,last):
++    # Same as build_balanced_features.files; only the year ceiling differs.
++    if last>2026: raise ValueError('No partition access after 2026')
++    found=[p for year in range(first,last+1) for p in sorted((root/f'{partition}={year}').glob('*.parquet'))]
++    if not found: raise FileNotFoundError(root)
++    return found
+ RANK_PARENTS={name for r in RECORDS if r['family']=='I' for name in r['source'].split('; ')}
+ 
+ 
+@@ -54,12 +60,12 @@
+ 
+ def main():
+     p=argparse.ArgumentParser(description=__doc__)
+-    p.add_argument('--start-year',type=int,default=2011);p.add_argument('--end-year',type=int,default=2023)
++    p.add_argument('--start-year',type=int,default=2022);p.add_argument('--end-year',type=int,default=2026)
+     p.add_argument('--workers',type=int,default=8);p.add_argument('--bucket-size',type=int,default=64)
+     p.add_argument('--max-stocks',type=int);p.add_argument('--min-free-gb',type=float,default=8)
+-    p.add_argument('--output-dir',default=str(ROOT/'quant_data/processed/v2/local_features_2011_2023'))
++    p.add_argument('--output-dir',default=str(ROOT/'quant_data/processed/v2/local_features_2022_2026'))
+     args=p.parse_args()
+-    if not 2011<=args.start_year<=args.end_year<=2023 or args.workers<1 or args.bucket_size<1:raise ValueError('Invalid build scope')
++    if not 2011<=args.start_year<=args.end_year<=2026 or args.workers<1 or args.bucket_size<1:raise ValueError('Invalid build scope')
+     output=Path(args.output_dir).resolve()
+     if not output.is_relative_to(ROOT/'quant_data/processed/v2'):raise ValueError('V2 output required')
+     output.mkdir(parents=True,exist_ok=True);check_space(output,args.min_free_gb)
+@@ -90,6 +96,14 @@
+         save_frame(output/'market.parquet',market)
+         calendar=con.execute('SELECT DISTINCT trade_date AS signal_date FROM daily ORDER BY signal_date').fetch_df()
+         save_frame(output/'calendar.parquet',calendar)
++    # [month-loop change] Last source month; later months must have zero source rows and get no partition.
++    last_source=pd.Timestamp(con.execute('SELECT max(signal_date) FROM base').fetchone()[0])
++    after=pd.Timestamp(year=last_source.year,month=last_source.month,day=1)+pd.offsets.MonthBegin(1)
++    for name in paths:
++        date='signal_date' if name=='base' else 'trade_date'
++        n_after=con.execute(f'SELECT count(*) FROM {name} WHERE {date}>=?',[after]).fetchone()[0]
++        if n_after!=0:raise ValueError(f'{name} has {n_after} rows after {last_source.date()}')
++    def months_of(year):return range(1,13) if year<last_source.year else range(1,last_source.month+1)
+     market=pd.read_parquet(output/'market.parquet').set_index('signal_date')
+     calendar=pd.DatetimeIndex(pd.read_parquet(output/'calendar.parquet').signal_date,name='signal_date')
+     for year in range(history,args.end_year+1):
+@@ -139,10 +153,10 @@
+     # diagnostics only and never used as training preprocessing parameters.
+     for year in range(args.start_year,args.end_year+1):
+         fps=list((output/'_factor_cache'/f'year={year}').glob('*.parquet'))
+-        if not fps and all(f'{year}-{month:02d}' in state['completed_months'] for month in range(1,13)):continue
++        if not fps and all(f'{year}-{month:02d}' in state['completed_months'] for month in months_of(year)):continue
+         if not fps:raise ValueError(f'Missing year cache {year}')
+         con.read_parquet([str(f) for f in fps],hive_partitioning=False).create_view('year_features',replace=True)
+-        for month in range(1,13):
++        for month in months_of(year):
+             key=f'{year}-{month:02d}'
+             if key in state['completed_months']:continue
+             check_space(output,args.min_free_gb);write_status(output,state,phase='monthly_cross_section',month=key)
