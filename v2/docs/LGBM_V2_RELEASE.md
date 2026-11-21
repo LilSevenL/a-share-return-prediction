@@ -41,8 +41,6 @@ The archived frozen_config.json preserves the original research hashes. Its stri
 
 Vendor datasets, fitted models, per-stock predictions/orders and large caches remain local. CSVs here contain aggregate research results. Notes naming local disks and quant_data paths describe the original environment.
 
-## Interpretation
-
 ## Publication completeness check
 
 The GitHub snapshot was cloned into a separate checkout and checked without local market datasets. All 78 existing unit tests and all 14 argparse-based LightGBM/extension command-line help entry points passed using the local research Python environment. Repository Markdown links had no missing targets, and import inspection found no unresolved modules in that environment.
