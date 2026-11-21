@@ -61,3 +61,7 @@
 可先读第 34–38 阶段了解最新的 Elastic 筛选复验、收益归因和独立板块预算结果，再读第 26–33 阶段了解模型对比及样本审计，再回看第2、5、14至18阶段理解因子设计、数据限制和候选形成过程。各阶段文档完整程度不同，有些阶段将方案和结论合并在结果报告中。
 
 这些后续比较使用已查看的历史开发期。报告中的收益需结合资金规模、成本、成交假设和训练样本量一起理解。真正未来验证仍需要冻结候选后取得的新数据。
+
+## LightGBM update, November 20, 2026
+
+The completed optimization, frozen configuration, confirmation results and model limits are described in [LightGBM V2 release](LGBM_V2_RELEASE.md). Earlier tables on this page retain their original linear-experiment scope.

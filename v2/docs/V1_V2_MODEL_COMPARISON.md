@@ -144,3 +144,7 @@ OLS 与 Elastic Net 均已有两版结果。因子输入、样本门控、预处
 ### 当前候选与尚待完成事项
 
 当前研究候选包含精简 Huber、MAE，以及加入训练样本完整度筛选的 333 因子 Elastic Net。已完成的 Elastic 筛选效果在三个抽样种子和共同板块预算下重复出现。候选最终选择仍需要统一训练样本比较各损失、预先记录选择标准、冻结配置，再用之后取得的新数据验证。2017–2023 年已用于反复开发，历史退市覆盖、实际公司行动处理及成交成本校准仍是限制。LightGBM 与 MLP 的 V2 同模型配对尚待实施。
+
+## LightGBM update, November 20, 2026
+
+The completed optimization, frozen configuration, confirmation results and model limits are described in [LightGBM V2 release](LGBM_V2_RELEASE.md). Earlier tables on this page retain their original linear-experiment scope.

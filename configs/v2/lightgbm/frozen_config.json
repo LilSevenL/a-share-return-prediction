@@ -1,0 +1,479 @@
+{
+  "final": "F3",
+  "definition": {
+    "structure": "medium",
+    "lambda_l2": 1000,
+    "lambda_l1_rule": "sig2(10 x ratio_D) (2 significant digits), ratio_D = std(D label) / std(raw label) on the inner fit set",
+    "min_data_in_leaf_rule": "ceil(0.001 x actual fit rows)"
+  },
+  "lightgbm_params": {
+    "objective": "regression",
+    "metric": "None",
+    "boosting": "gbdt",
+    "learning_rate": 0.02,
+    "num_leaves": 127,
+    "max_depth": 8,
+    "feature_fraction": 0.3,
+    "bagging_fraction": 1.0,
+    "bagging_freq": 0,
+    "max_bin": 255,
+    "lambda_l2": 1000.0,
+    "extra_trees": false,
+    "min_gain_to_split": 0.0,
+    "feature_pre_filter": false,
+    "force_col_wise": true,
+    "deterministic": true,
+    "num_threads": 8,
+    "verbosity": -1
+  },
+  "training_procedure": {
+    "sample": "seed 20261025, priority = hash(ts_code, CAST(signal_date AS DATE), 20261025), ordered by priority, ts_code, signal_date; training pool = finite raw label, signal and exit < Y-01-01, from 2011-01-01; first 2,000,000 rows; no gate; 448 raw factors (feature_names(year, \"full\"))",
+    "rounds": "inner fit (full-sample rows with signal and exit < Y-1-01-01) + early-stopping set (first 300,000 Y-1 pool rows by priority, exit < Y-01-01); R1: patience 200, cap 6000, evaluated every 10 rounds",
+    "early_stopping": {
+      "metric": "all-sample daily Rank IC of the raw label on the early-stopping set, every 10 rounds",
+      "patience": 200,
+      "cap": 6000,
+      "rounds_used": "best_iteration (rounds, not scaled)"
+    },
+    "refit": "complete 2,000,000-row sample, D label rebuilt on it, num_boost_round = best_iteration of the same seed and fold, no early stopping; lambda1 from the selection flow of the fold; min_data_in_leaf = ceil(0.001 x 2,000,000) = 2000",
+    "seeds": [
+      42,
+      7,
+      2026
+    ],
+    "prediction": "raw predictions of the three seeds averaged"
+  },
+  "d_label": "per signal date, (average rank of the raw 5-day log return - 0.5) / number of stocks with a finite raw label that day (all stocks, not only sampled rows); exit dates of rows used < Y-01-01",
+  "scoring": {
+    "eligible_pool": "daily, turnover >= threshold and listed >= 60 days, finite label, >= 20 stocks; equal-weight Spearman per day",
+    "score": "mean - 0.25 x std (ddof=0) of the five fold eligible Rank ICs",
+    "significance": "Newey-West t, lag 5, on concatenated daily differences"
+  },
+  "folds": [
+    {
+      "year": 2017,
+      "lambda_l1": 39.0,
+      "min_data_in_leaf_review": 2000,
+      "sample_key_hashes": {
+        "full_sample_keys": "54f8379b2a2ab4e4b4dc52efb11cfd22d9fa8f8ef1a0ba9580d6c0d6506b8572",
+        "fit_keys_and_y": "bb537014046b78944172d3924b5c89c35e582c4a06087bb8b87557133b684070",
+        "es_keys_and_y": "108c890165264ea6ae6fdf9987b62099f74255d3a1abede5193588438d78c533",
+        "outer_keys_and_y": "ddce4f1a41a48278fd83538d9aaf8a8e857b7c5ab5e3ad0c30929fe1205c6e25"
+      },
+      "complete_sample_hashes": {
+        "full_keys": "54f8379b2a2ab4e4b4dc52efb11cfd22d9fa8f8ef1a0ba9580d6c0d6506b8572",
+        "full_keys_and_y": "e6e07f89e33b197eae1cd8b18a596258a3fc6657ceaa5819e9c68f21348817e4",
+        "full_d": "d2852a14bc3604177d800602ccc70d901ca8b24f1c202ae6b94857fd7feaf32f",
+        "base_cache": {
+          "full_sample_keys": "54f8379b2a2ab4e4b4dc52efb11cfd22d9fa8f8ef1a0ba9580d6c0d6506b8572",
+          "fit_keys_and_y": "bb537014046b78944172d3924b5c89c35e582c4a06087bb8b87557133b684070",
+          "es_keys_and_y": "108c890165264ea6ae6fdf9987b62099f74255d3a1abede5193588438d78c533",
+          "outer_keys_and_y": "ddce4f1a41a48278fd83538d9aaf8a8e857b7c5ab5e3ad0c30929fe1205c6e25"
+        }
+      },
+      "complete_sample_rows": {
+        "from_fit": 1620427,
+        "from_es": 300000,
+        "fetched_missing": 79573,
+        "fetched_by_signal_year": {
+          "2015": 7441,
+          "2016": 72132
+        },
+        "es_rows_not_in_full_sample": 0
+      },
+      "seeds": [
+        {
+          "seed": 42,
+          "rounds": 2090,
+          "trees_built": 2090,
+          "derived_seeds": {
+            "seed": 42,
+            "data_random_seed": 175,
+            "feature_fraction_seed": 30056,
+            "bagging_seed": 400,
+            "extra_seed": 12879,
+            "drop_seed": 17869,
+            "objective_seed": 16083
+          }
+        },
+        {
+          "seed": 7,
+          "rounds": 2240,
+          "trees_built": 2240,
+          "derived_seeds": {
+            "seed": 7,
+            "data_random_seed": 61,
+            "feature_fraction_seed": 7040,
+            "bagging_seed": 17422,
+            "extra_seed": 6516,
+            "drop_seed": 15215,
+            "objective_seed": 15521
+          }
+        },
+        {
+          "seed": 2026,
+          "rounds": 2300,
+          "trees_built": 2300,
+          "derived_seeds": {
+            "seed": 2026,
+            "data_random_seed": 6654,
+            "feature_fraction_seed": 28694,
+            "bagging_seed": 26038,
+            "extra_seed": 4728,
+            "drop_seed": 5409,
+            "objective_seed": 199
+          }
+        }
+      ]
+    },
+    {
+      "year": 2018,
+      "lambda_l1": 39.0,
+      "min_data_in_leaf_review": 2000,
+      "sample_key_hashes": {
+        "full_sample_keys": "b9ddd972ef558320b3824b3eb4455eda980eefcc209197d154b9a58b588b1177",
+        "fit_keys_and_y": "c8b8b2dbafbcbf715b16beb225b4de1db26a8afb074ac70576a9264de1446504",
+        "es_keys_and_y": "8cc4782b4a4e547eaf9b53cbf2a339ec20ad15d6ab57355d546f76217b60c1c3",
+        "outer_keys_and_y": "99ae2971c9a646322923897664b31f50b8587b100779ba56c81dc9b54018fcf9"
+      },
+      "complete_sample_hashes": {
+        "full_keys": "b9ddd972ef558320b3824b3eb4455eda980eefcc209197d154b9a58b588b1177",
+        "full_keys_and_y": "944a1c7d9396ddb4adb1fe43da3428ef8b565261be5a7486de5dd413c6b120db",
+        "full_d": "cce24ce962f5ed938949e0b3c14041af3b1cccf51498548a3592a04791cd9950",
+        "base_cache": {
+          "full_sample_keys": "b9ddd972ef558320b3824b3eb4455eda980eefcc209197d154b9a58b588b1177",
+          "fit_keys_and_y": "c8b8b2dbafbcbf715b16beb225b4de1db26a8afb074ac70576a9264de1446504",
+          "es_keys_and_y": "8cc4782b4a4e547eaf9b53cbf2a339ec20ad15d6ab57355d546f76217b60c1c3",
+          "outer_keys_and_y": "99ae2971c9a646322923897664b31f50b8587b100779ba56c81dc9b54018fcf9"
+        }
+      },
+      "complete_sample_rows": {
+        "from_fit": 1633560,
+        "from_es": 300000,
+        "fetched_missing": 66440,
+        "fetched_by_signal_year": {
+          "2016": 6949,
+          "2017": 59491
+        },
+        "es_rows_not_in_full_sample": 0
+      },
+      "seeds": [
+        {
+          "seed": 42,
+          "rounds": 2520,
+          "trees_built": 2520,
+          "derived_seeds": {
+            "seed": 42,
+            "data_random_seed": 175,
+            "feature_fraction_seed": 30056,
+            "bagging_seed": 400,
+            "extra_seed": 12879,
+            "drop_seed": 17869,
+            "objective_seed": 16083
+          }
+        },
+        {
+          "seed": 7,
+          "rounds": 2200,
+          "trees_built": 2200,
+          "derived_seeds": {
+            "seed": 7,
+            "data_random_seed": 61,
+            "feature_fraction_seed": 7040,
+            "bagging_seed": 17422,
+            "extra_seed": 6516,
+            "drop_seed": 15215,
+            "objective_seed": 15521
+          }
+        },
+        {
+          "seed": 2026,
+          "rounds": 2260,
+          "trees_built": 2260,
+          "derived_seeds": {
+            "seed": 2026,
+            "data_random_seed": 6654,
+            "feature_fraction_seed": 28694,
+            "bagging_seed": 26038,
+            "extra_seed": 4728,
+            "drop_seed": 5409,
+            "objective_seed": 199
+          }
+        }
+      ]
+    },
+    {
+      "year": 2019,
+      "lambda_l1": 41.0,
+      "min_data_in_leaf_review": 2000,
+      "sample_key_hashes": {
+        "full_sample_keys": "e5e56a7c0abce27f06dcf003991f29d96aadb2c6b5c0e51e14f04b72bc1f0d93",
+        "fit_keys_and_y": "eb57914cb48a5c6fa3151ed281c1b875fff7570e804de917383f0b90625fdc1f",
+        "es_keys_and_y": "4ec16ccc0fcb563851bc9edaaf80dd973226b81d3a5147344966e752c8190041",
+        "outer_keys_and_y": "7a313f607a5455e9c4200a99ee15561c3552eb194e082fc96a464495d1934a46"
+      },
+      "complete_sample_hashes": {
+        "full_keys": "e5e56a7c0abce27f06dcf003991f29d96aadb2c6b5c0e51e14f04b72bc1f0d93",
+        "full_keys_and_y": "cab07949783f10c5a0c941fccc729ab964c3e0c3c128cc713b8e8ff6f53c0412",
+        "full_d": "3d051ba2a8da18e5ae248894f0d451e247232eeff91c383a32b4edcdf9b5a435",
+        "base_cache": {
+          "full_sample_keys": "e5e56a7c0abce27f06dcf003991f29d96aadb2c6b5c0e51e14f04b72bc1f0d93",
+          "fit_keys_and_y": "eb57914cb48a5c6fa3151ed281c1b875fff7570e804de917383f0b90625fdc1f",
+          "es_keys_and_y": "4ec16ccc0fcb563851bc9edaaf80dd973226b81d3a5147344966e752c8190041",
+          "outer_keys_and_y": "7a313f607a5455e9c4200a99ee15561c3552eb194e082fc96a464495d1934a46"
+        }
+      },
+      "complete_sample_rows": {
+        "from_fit": 1661826,
+        "from_es": 300000,
+        "fetched_missing": 38174,
+        "fetched_by_signal_year": {
+          "2017": 6734,
+          "2018": 31440
+        },
+        "es_rows_not_in_full_sample": 0
+      },
+      "seeds": [
+        {
+          "seed": 42,
+          "rounds": 2300,
+          "trees_built": 2300,
+          "derived_seeds": {
+            "seed": 42,
+            "data_random_seed": 175,
+            "feature_fraction_seed": 30056,
+            "bagging_seed": 400,
+            "extra_seed": 12879,
+            "drop_seed": 17869,
+            "objective_seed": 16083
+          }
+        },
+        {
+          "seed": 7,
+          "rounds": 2370,
+          "trees_built": 2370,
+          "derived_seeds": {
+            "seed": 7,
+            "data_random_seed": 61,
+            "feature_fraction_seed": 7040,
+            "bagging_seed": 17422,
+            "extra_seed": 6516,
+            "drop_seed": 15215,
+            "objective_seed": 15521
+          }
+        },
+        {
+          "seed": 2026,
+          "rounds": 2160,
+          "trees_built": 2160,
+          "derived_seeds": {
+            "seed": 2026,
+            "data_random_seed": 6654,
+            "feature_fraction_seed": 28694,
+            "bagging_seed": 26038,
+            "extra_seed": 4728,
+            "drop_seed": 5409,
+            "objective_seed": 199
+          }
+        }
+      ]
+    },
+    {
+      "year": 2020,
+      "lambda_l1": 41.0,
+      "min_data_in_leaf_review": 2000,
+      "sample_key_hashes": {
+        "full_sample_keys": "f489f1c9ca63d3a55406cfba23be0d13465afb522cad40bee71f896e841c61b2",
+        "fit_keys_and_y": "ec3db0e9d44e9027c831d6f94bbfadf677c24d9250f07689628eb6408e92b673",
+        "es_keys_and_y": "b7b36203fdae08bb316132c4f2a9ceb1ea2615999a9707a3c5bb7daa8fe7bdd7",
+        "outer_keys_and_y": "b9d4214e2c821d2d62ddbd22f5ad1d3194d02860ddc1ee69af14a3a84401ae21"
+      },
+      "complete_sample_hashes": {
+        "full_keys": "f489f1c9ca63d3a55406cfba23be0d13465afb522cad40bee71f896e841c61b2",
+        "full_keys_and_y": "ec3db06d18a335a89293838ef65273dda60e6b670b121c4223a3d9b4bea20a73",
+        "full_d": "3e0a09ed19e24e0ae47cd31e13c98fc5e6e27a2b3d07fc006644d4c48ea56809",
+        "base_cache": {
+          "full_sample_keys": "f489f1c9ca63d3a55406cfba23be0d13465afb522cad40bee71f896e841c61b2",
+          "fit_keys_and_y": "ec3db0e9d44e9027c831d6f94bbfadf677c24d9250f07689628eb6408e92b673",
+          "es_keys_and_y": "b7b36203fdae08bb316132c4f2a9ceb1ea2615999a9707a3c5bb7daa8fe7bdd7",
+          "outer_keys_and_y": "b9d4214e2c821d2d62ddbd22f5ad1d3194d02860ddc1ee69af14a3a84401ae21"
+        }
+      },
+      "complete_sample_rows": {
+        "from_fit": 1689947,
+        "from_es": 300000,
+        "fetched_missing": 10053,
+        "fetched_by_signal_year": {
+          "2018": 6228,
+          "2019": 3825
+        },
+        "es_rows_not_in_full_sample": 0
+      },
+      "seeds": [
+        {
+          "seed": 42,
+          "rounds": 4400,
+          "trees_built": 4400,
+          "derived_seeds": {
+            "seed": 42,
+            "data_random_seed": 175,
+            "feature_fraction_seed": 30056,
+            "bagging_seed": 400,
+            "extra_seed": 12879,
+            "drop_seed": 17869,
+            "objective_seed": 16083
+          }
+        },
+        {
+          "seed": 7,
+          "rounds": 4830,
+          "trees_built": 4830,
+          "derived_seeds": {
+            "seed": 7,
+            "data_random_seed": 61,
+            "feature_fraction_seed": 7040,
+            "bagging_seed": 17422,
+            "extra_seed": 6516,
+            "drop_seed": 15215,
+            "objective_seed": 15521
+          }
+        },
+        {
+          "seed": 2026,
+          "rounds": 5460,
+          "trees_built": 5460,
+          "derived_seeds": {
+            "seed": 2026,
+            "data_random_seed": 6654,
+            "feature_fraction_seed": 28694,
+            "bagging_seed": 26038,
+            "extra_seed": 4728,
+            "drop_seed": 5409,
+            "objective_seed": 199
+          }
+        }
+      ]
+    },
+    {
+      "year": 2021,
+      "lambda_l1": 42.0,
+      "min_data_in_leaf_review": 2000,
+      "sample_key_hashes": {
+        "full_sample_keys": "55c8b7811389cf87744c24a9764cc4a4908a65e4f824bf365ae0062b14314c72",
+        "fit_keys_and_y": "f6f46c4ce32a6e59607bcdd2fba706ff5b405209b8fef07149874caa59a699a9",
+        "es_keys_and_y": "7aba18b117e6143ea555ad10c0839e34a7446be4fdf8c149a79e33d36316d662",
+        "outer_keys_and_y": "531bc39b6e976a495b266efeb2946f418f1a3aaa0cbb6a32e93c7e79c1c5cae6"
+      },
+      "complete_sample_hashes": {
+        "full_keys": "55c8b7811389cf87744c24a9764cc4a4908a65e4f824bf365ae0062b14314c72",
+        "full_keys_and_y": "57dfa8b844847ac8bd806bd5c459b8aa6d588fe657915f53ef0aa31e01cca5ca",
+        "full_d": "3ab16cc464fd78ab3c690f5ae88a56e870992a50cb55f51ea4798c8f219c65e0",
+        "base_cache": {
+          "full_sample_keys": "55c8b7811389cf87744c24a9764cc4a4908a65e4f824bf365ae0062b14314c72",
+          "fit_keys_and_y": "f6f46c4ce32a6e59607bcdd2fba706ff5b405209b8fef07149874caa59a699a9",
+          "es_keys_and_y": "7aba18b117e6143ea555ad10c0839e34a7446be4fdf8c149a79e33d36316d662",
+          "outer_keys_and_y": "531bc39b6e976a495b266efeb2946f418f1a3aaa0cbb6a32e93c7e79c1c5cae6"
+        }
+      },
+      "complete_sample_rows": {
+        "from_fit": 1710737,
+        "from_es": 283563,
+        "fetched_missing": 5700,
+        "fetched_by_signal_year": {
+          "2019": 5700
+        },
+        "es_rows_not_in_full_sample": 16437
+      },
+      "seeds": [
+        {
+          "seed": 42,
+          "rounds": 4940,
+          "trees_built": 4940,
+          "derived_seeds": {
+            "seed": 42,
+            "data_random_seed": 175,
+            "feature_fraction_seed": 30056,
+            "bagging_seed": 400,
+            "extra_seed": 12879,
+            "drop_seed": 17869,
+            "objective_seed": 16083
+          }
+        },
+        {
+          "seed": 7,
+          "rounds": 3260,
+          "trees_built": 3260,
+          "derived_seeds": {
+            "seed": 7,
+            "data_random_seed": 61,
+            "feature_fraction_seed": 7040,
+            "bagging_seed": 17422,
+            "extra_seed": 6516,
+            "drop_seed": 15215,
+            "objective_seed": 15521
+          }
+        },
+        {
+          "seed": 2026,
+          "rounds": 4690,
+          "trees_built": 4690,
+          "derived_seeds": {
+            "seed": 2026,
+            "data_random_seed": 6654,
+            "feature_fraction_seed": 28694,
+            "bagging_seed": 26038,
+            "extra_seed": 4728,
+            "drop_seed": 5409,
+            "objective_seed": 199
+          }
+        }
+      ]
+    }
+  ],
+  "selection": {
+    "removed_negative_fold": [],
+    "T": "F2",
+    "gaps_to_T": {
+      "F1": {
+        "score_gap": 0.00022641769325351668,
+        "mean_daily_diff": 0.00017796669188350635,
+        "nw_t": 1.3242060270916038,
+        "beaten_by_T": false
+      },
+      "F3": {
+        "score_gap": 0.001048728729263343,
+        "mean_daily_diff": 0.0011043084165196747,
+        "nw_t": 1.8627535666312744,
+        "beaten_by_T": false
+      }
+    },
+    "plateau": [
+      "F1",
+      "F2",
+      "F3"
+    ],
+    "simplicity_order": [
+      "F3",
+      "F1",
+      "F2"
+    ],
+    "final": "F3",
+    "reason": "T = F2 (review score 0.13980); plateau = ['F3', 'F1', 'F2']; simplest in plateau (medium < deep; same structure larger lambda2) = F3",
+    "rule": "plan section 8 / 17 item 5: drop negative folds; T = highest review score; plateau = configs whose gap to T is not (score gap >= 0.001 and NW t >= 2); pick the simplest in the plateau"
+  },
+  "code_sha256": {
+    "run_lgbm_v2_review.py": "dba7bccd2f118b31ee2ba2a84c82966f01d74eac842f673e431ced81462ec969",
+    "run_lgbm_v2_final.py": "db06f637e5ee898ddaf9fb9e19e227c13b5db2a87a28b9b894fbb7e02d57eb7c",
+    "run_lgbm_v2_input.py": "8271c117a3610475e8caaebe584c359802ab4ae10d6549a285ad481603949236",
+    "lgbm_v2_common.py": "8c952430b20159688db64ba1be2a69ccc14af72cf07b2a47c5cc6fdc2afe6e25",
+    "lgbm_v2_cache.py": "2191d1816e9be825d4f02df62cdaa88d1b9899c48799c8b2d5b15b2151593fcb",
+    "run_lgbm_v2_stage1.py": "1d93317f5f5f12437fccb37a092782f91b01952298fa3c0318f283114ade07a4",
+    "run_lgbm_v2_stage2.py": "47a26155a5e418fbb42ad782570ae303acb5a16ae06906559dd7e5c79def7257",
+    "run_lgbm_v2_stage6a.py": "acac1668b1e1dd53b497359e84f5da7fbe9194c5747ba427e01cc7b6a8e2899a",
+    "run_lgbm_v2_pilot.py": "598fd797711797ce14cb82c9847f380122fc91efb84ada50220cdcb6b6114c56",
+    "research_controls.py": "f05a0cbcbbdc8a706eb51160afd08ecce2c44cfad4ff1e9fff585e4e5be8b10b",
+    "tune_elastic_net.py": "7160fe258427909f662195c0f66210f1e1b0d5f0b1338a3f647ad9944b39bade"
+  },
+  "frozen_at": "2026-11-20 09:28:58",
+  "test_used": false
+}

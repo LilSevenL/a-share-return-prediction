@@ -25,3 +25,6 @@ venv/
 *.zip
 _github_publication/
 _prepare_publication.py
+
+# Published aggregate research tables
+!reports/v2/lightgbm/**/*.csv

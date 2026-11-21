@@ -1,0 +1,31 @@
+{
+  "removed_negative_fold": [],
+  "T": "F2",
+  "gaps_to_T": {
+    "F1": {
+      "score_gap": 0.00022641769325351668,
+      "mean_daily_diff": 0.00017796669188350635,
+      "nw_t": 1.3242060270916038,
+      "beaten_by_T": false
+    },
+    "F3": {
+      "score_gap": 0.001048728729263343,
+      "mean_daily_diff": 0.0011043084165196747,
+      "nw_t": 1.8627535666312744,
+      "beaten_by_T": false
+    }
+  },
+  "plateau": [
+    "F1",
+    "F2",
+    "F3"
+  ],
+  "simplicity_order": [
+    "F3",
+    "F1",
+    "F2"
+  ],
+  "final": "F3",
+  "reason": "T = F2 (review score 0.13980); plateau = ['F3', 'F1', 'F2']; simplest in plateau (medium < deep; same structure larger lambda2) = F3",
+  "rule": "plan section 8 / 17 item 5: drop negative folds; T = highest review score; plateau = configs whose gap to T is not (score gap >= 0.001 and NW t >= 2); pick the simplest in the plateau"
+}

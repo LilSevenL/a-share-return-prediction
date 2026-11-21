@@ -32,3 +32,7 @@ Use 2017–2023 only as the already-inspected development period. V1 final retra
 ## Directory migration
 
 Only code organization, import paths and source-file provenance paths changed. Data paths still resolve to the repository-level `quant_data/`; the migration did not rerun or modify historical training results. Existing original manifests may contain old source paths/hashes and are not expected to match reorganized source bytes without a fresh, separately recorded run.
+
+## LightGBM update, November 20, 2026
+
+The completed optimization, frozen configuration, confirmation results and model limits are described in [LightGBM V2 release](LGBM_V2_RELEASE.md). Earlier tables on this page retain their original linear-experiment scope.

@@ -1,0 +1,12 @@
+{
+  "params": true,
+  "feature_names": true,
+  "rows": true,
+  "shapes": true,
+  "hashes": true,
+  "file_bytes": true,
+  "elastic_pred_equal": true,
+  "fit_x_equal": true,
+  "es_x_equal": true,
+  "passed": true
+}

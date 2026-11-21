@@ -1,0 +1,130 @@
+{
+  "groups": [
+    "G1_lgbm_final",
+    "G2_elastic_D",
+    "G3_linear_candidate",
+    "G4_fusion_50_50"
+  ],
+  "coverage": [
+    {
+      "year": 2017,
+      "outer_rows": 662747,
+      "candidate_rows": 662747,
+      "only_outer": 0,
+      "only_candidate": 0,
+      "volatility_equal": true,
+      "G1_lgbm_final_finite": 662747,
+      "G2_elastic_D_finite": 662747,
+      "G3_linear_candidate_finite": 662747,
+      "G4_fusion_50_50_finite": 662747,
+      "days": 244,
+      "days_with_unequal_coverage": 0,
+      "same_stock_set_every_day": true
+    },
+    {
+      "year": 2018,
+      "outer_rows": 732708,
+      "candidate_rows": 732708,
+      "only_outer": 0,
+      "only_candidate": 0,
+      "volatility_equal": true,
+      "G1_lgbm_final_finite": 732708,
+      "G2_elastic_D_finite": 732708,
+      "G3_linear_candidate_finite": 732708,
+      "G4_fusion_50_50_finite": 732708,
+      "days": 243,
+      "days_with_unequal_coverage": 0,
+      "same_stock_set_every_day": true
+    },
+    {
+      "year": 2019,
+      "outer_rows": 794880,
+      "candidate_rows": 794880,
+      "only_outer": 0,
+      "only_candidate": 0,
+      "volatility_equal": true,
+      "G1_lgbm_final_finite": 794880,
+      "G2_elastic_D_finite": 794880,
+      "G3_linear_candidate_finite": 794880,
+      "G4_fusion_50_50_finite": 794880,
+      "days": 244,
+      "days_with_unequal_coverage": 0,
+      "same_stock_set_every_day": true
+    },
+    {
+      "year": 2020,
+      "outer_rows": 862979,
+      "candidate_rows": 862979,
+      "only_outer": 0,
+      "only_candidate": 0,
+      "volatility_equal": true,
+      "G1_lgbm_final_finite": 862979,
+      "G2_elastic_D_finite": 862979,
+      "G3_linear_candidate_finite": 862979,
+      "G4_fusion_50_50_finite": 862979,
+      "days": 243,
+      "days_with_unequal_coverage": 0,
+      "same_stock_set_every_day": true
+    },
+    {
+      "year": 2021,
+      "outer_rows": 989088,
+      "candidate_rows": 989088,
+      "only_outer": 0,
+      "only_candidate": 0,
+      "volatility_equal": true,
+      "G1_lgbm_final_finite": 989088,
+      "G2_elastic_D_finite": 989088,
+      "G3_linear_candidate_finite": 989088,
+      "G4_fusion_50_50_finite": 989088,
+      "days": 243,
+      "days_with_unequal_coverage": 0,
+      "same_stock_set_every_day": true
+    },
+    {
+      "year": 2022,
+      "outer_rows": 1094635,
+      "candidate_rows": 1094635,
+      "only_outer": 0,
+      "only_candidate": 0,
+      "volatility_equal": true,
+      "G1_lgbm_final_finite": 1094635,
+      "G2_elastic_D_finite": 1094635,
+      "G3_linear_candidate_finite": 1094635,
+      "G4_fusion_50_50_finite": 1094635,
+      "days": 242,
+      "days_with_unequal_coverage": 0,
+      "same_stock_set_every_day": true
+    },
+    {
+      "year": 2023,
+      "outer_rows": 1192217,
+      "candidate_rows": 1192217,
+      "only_outer": 0,
+      "only_candidate": 0,
+      "volatility_equal": true,
+      "G1_lgbm_final_finite": 1192217,
+      "G2_elastic_D_finite": 1192217,
+      "G3_linear_candidate_finite": 1192217,
+      "G4_fusion_50_50_finite": 1192217,
+      "days": 242,
+      "days_with_unequal_coverage": 0,
+      "same_stock_set_every_day": true
+    }
+  ],
+  "sources": {
+    "G1": "2017-2021 lgbm_final/review/average/{y}_F3 (stage-8 three-seed average); 2022-2023 lgbm_confirm/average/{y}_F3",
+    "G2": "lgbm_final/review/elastic/{y}/outer_pred.npy (complete 2M-row Elastic(D), 2022-2023 fitted in stage 9)",
+    "G3": "elastic_compact_gate_seeds/{y}/predictions.parquet, columns ['s20261025_features_only', 's20261026_features_only', 's20261027_features_only'], equal-weight mean of the raw predictions",
+    "G4": "0.5 x daily rank(G1)/n + 0.5 x daily rank(G3)/n on stocks with both predictions"
+  },
+  "candidate_files_sha256": {
+    "2017": "5fae9afb71ca1820c113e52a996a920471dcec2575133da7e4373d3095b0eedc",
+    "2018": "d1fb05dc4db21541614716fbb09322242340374ddc3004865877939fd98b4b8f",
+    "2019": "5f468d0c636c68c92267c0dacb890e5ae83c424ccd3d96f78f02d8207201af73",
+    "2020": "9bb26fc5c4105065f0c86ee686709b024849c639791bbada40801845f2061ebe",
+    "2021": "a1cc862783e675770d9924a35f0267aa4dfa07b5da2ee93f68d315d6d4cc2f77",
+    "2022": "f270de525b3f08ae680c09f15e6eaaead8801443346c671427e268359d96580b",
+    "2023": "8167cc6a840a863776ecaecfa41112131dd941a5f4103c0a95dcf915f4f53faf"
+  }
+}
